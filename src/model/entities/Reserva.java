@@ -2,12 +2,18 @@ package model.entities;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Reserva {
-	private Integer numeroQuarto;
+	protected Integer numeroQuarto;
 	private LocalDate dataEntrada;
 	private LocalDate dataSaida;
-
+	
+	public final static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	
+	public Reserva() {
+	}
+	
 	public Reserva(Integer numeroQuarto, LocalDate dataEntrada, LocalDate dataSaida) {
 		this.numeroQuarto = numeroQuarto;
 		this.dataEntrada = dataEntrada;
@@ -33,5 +39,23 @@ public class Reserva {
 	public Duration getDuracao() {
 		Duration duração = Duration.between(dataEntrada.atStartOfDay(), dataSaida.atStartOfDay());
 		return duração;
+	}
+	
+	public void atualizarDatas(LocalDate dataEntrada, LocalDate dataSaida) {
+		this.dataEntrada = dataEntrada;
+		this.dataSaida = dataSaida;
+	}
+	
+	@Override
+	public String toString() {
+		return "Reserva: Quarto " 
+				+ numeroQuarto 
+				+ ", Entrada: " 
+				+ dataEntrada.format(fmt) 
+				+ ", Saída: " 
+				+ dataSaida.format(fmt)
+				+ ", Duração: " 
+				+ getDuracao().toDays() 
+				+ " noites";
 	}
 }
