@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import model.exceptions.FelipyExercecao;
+
 public class Reserva {
 	protected Integer numeroQuarto;
 	private LocalDate dataEntrada;
@@ -15,10 +17,9 @@ public class Reserva {
 	}
 
 	public Reserva(Integer numeroQuarto, LocalDate dataEntrada, LocalDate dataSaida) {
-		if (!dataSaida.isAfter(dataEntrada)) {
-			System.out.println("A data de saída deve ser posterior à data de entrada.");
-			return;
-		} else {
+		if (!dataEntrada.isAfter(LocalDate.now())) {
+			throw new FelipyExercecao("A data de entrada não pode ser anterior ou igual à data atual.");
+		}else {
 			this.numeroQuarto = numeroQuarto;
 			this.dataEntrada = dataEntrada;
 			this.dataSaida = dataSaida;
@@ -47,10 +48,12 @@ public class Reserva {
 	}
 
 	public void atualizarDatas(LocalDate dataEntrada, LocalDate dataSaida) {
+		if (dataEntrada.isBefore(LocalDate.now()) || dataSaida.isBefore(LocalDate.now())) {
+			throw new FelipyExercecao("As datas não podem ser anterior à data atual.");
+		}
 		if (!dataSaida.isAfter(dataEntrada)) {
-			System.out.println("A data de saída deve ser posterior à data de entrada.");
-			return;
-		} else {
+			throw new FelipyExercecao("A data de saída deve ser posterior à data de entrada.");
+		}else {
 			this.dataEntrada = dataEntrada;
 			this.dataSaida = dataSaida;
 		}
@@ -58,7 +61,14 @@ public class Reserva {
 
 	@Override
 	public String toString() {
-		return "Reserva: Quarto " + numeroQuarto + ", Entrada: " + dataEntrada.format(fmt) + ", Saída: "
-				+ dataSaida.format(fmt) + ", Duração: " + getDuracao().toDays() + " noites";
+		return "Reserva: Quarto " 
+				+ numeroQuarto 
+				+ ", Entrada: " 
+				+ dataEntrada.format(fmt) 
+				+ ", Saída: "
+				+ dataSaida.format(fmt) 
+				+ ", Duração: " 
+				+ getDuracao().toDays() 
+				+ " noites";
 	}
 }
