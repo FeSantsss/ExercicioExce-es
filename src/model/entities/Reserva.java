@@ -8,16 +8,21 @@ public class Reserva {
 	protected Integer numeroQuarto;
 	private LocalDate dataEntrada;
 	private LocalDate dataSaida;
-	
+
 	public final static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	
+
 	public Reserva() {
 	}
-	
+
 	public Reserva(Integer numeroQuarto, LocalDate dataEntrada, LocalDate dataSaida) {
-		this.numeroQuarto = numeroQuarto;
-		this.dataEntrada = dataEntrada;
-		this.dataSaida = dataSaida;
+		if (!dataSaida.isAfter(dataEntrada)) {
+			System.out.println("A data de saída deve ser posterior à data de entrada.");
+			return;
+		} else {
+			this.numeroQuarto = numeroQuarto;
+			this.dataEntrada = dataEntrada;
+			this.dataSaida = dataSaida;
+		}
 	}
 
 	public Integer getNumeroQuarto() {
@@ -40,22 +45,20 @@ public class Reserva {
 		Duration duração = Duration.between(dataEntrada.atStartOfDay(), dataSaida.atStartOfDay());
 		return duração;
 	}
-	
+
 	public void atualizarDatas(LocalDate dataEntrada, LocalDate dataSaida) {
-		this.dataEntrada = dataEntrada;
-		this.dataSaida = dataSaida;
+		if (!dataSaida.isAfter(dataEntrada)) {
+			System.out.println("A data de saída deve ser posterior à data de entrada.");
+			return;
+		} else {
+			this.dataEntrada = dataEntrada;
+			this.dataSaida = dataSaida;
+		}
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Reserva: Quarto " 
-				+ numeroQuarto 
-				+ ", Entrada: " 
-				+ dataEntrada.format(fmt) 
-				+ ", Saída: " 
-				+ dataSaida.format(fmt)
-				+ ", Duração: " 
-				+ getDuracao().toDays() 
-				+ " noites";
+		return "Reserva: Quarto " + numeroQuarto + ", Entrada: " + dataEntrada.format(fmt) + ", Saída: "
+				+ dataSaida.format(fmt) + ", Duração: " + getDuracao().toDays() + " noites";
 	}
 }
